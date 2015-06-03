@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+  .red {
+    background-color: 'red';
+  }
+
+  .blue {
+    background-color: 'blue';
+  }
+</style>
+
+
+</head>
+
+<body>
+  <input type="radio"/>
+  <input type="radio"/>
+  <div class="red">Test</div>
+  <script>
+    var mutob = new MutationObserver(function(mutations) {
+      console.log(mutations);
+    });
+
+    var div = document.querySelector('div');
+
+    mutob.observe(div, { childList: true, characterData : true });
+    mutob.observe(div, { attributes : true, attributeFilter : [ 'class' ] });
+
+  </script>
+
+</body>
+</html>
