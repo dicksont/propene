@@ -9,7 +9,7 @@
 
     function loadFixtures() {
       var client = new XMLHttpRequest();
-      client.open('GET', 'fixtures.html');
+      client.open('GET', 'simple.html');
       client.onreadystatechange = function() {
         document.getElementById('qunit-fixture').innerHTML = client.responseText.trim();
       }
@@ -39,7 +39,7 @@
 
     window.addEventListener('DOMContentLoaded', function() {
       loadFixtures();
-      loadBrowserScripts([ "spec.js"]);
+      loadBrowserScripts([ "simple.js"]);
     });
 
   </script>

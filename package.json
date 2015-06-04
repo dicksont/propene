@@ -13,7 +13,7 @@
     "jsdom": "^5.4.3"
   },
   "scripts": {
-    "test": "qunit -c dist/propene.js -t spec/spec.js"
+    "test": "qunit -c dist/propene.js -t spec/simple.js"
   },
   "repository": {
     "type": "git",
