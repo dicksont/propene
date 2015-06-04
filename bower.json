@@ -1,0 +1,36 @@
+{
+  "name": "propene",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dicksont/propene",
+  "authors": [
+    "Dickson Tam <dicksont650@gmail.com>"
+  ],
+  "description": "Front-end library for binding Object properties to HTML element state",
+  "main": "dist/propene.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "bind",
+    "object",
+    "properties",
+    "frontend",
+    "HTML",
+    "element",
+    "state",
+    "DOM"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "define-uniqueid": "~0.0.3"
+  }
+}
