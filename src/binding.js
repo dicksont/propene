@@ -1,3 +1,29 @@
+/*
+ * Copyright (c) 2015 Dickson Tam
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 function getElement(selector) {
   if (selector instanceof HTMLElement) return selector;
   if (typeof(selector) == 'string')
@@ -9,14 +35,16 @@ function getElement(selector) {
 function Binding(obj, prop) {
     Object.defineProperty(obj, prop, {
       get: this.get.bind(this),
-      set: this.set.bind(this)
-    }
+      set: this.set.bind(this),
+      enumerable: true,
+      configurable: true
+    });
     this.accessors = [];
     this.observer = new Observer(this);
 }
 
 Binding.prototype.get = function() {
-  return (this.accessors[0] == undefined || this.accessors[0].length == 0)? null : this.accessors[0].get();
+  return (this.accessors[0] === undefined || this.accessors[0].length == 0)? null : this.accessors[0].get();
 }
 
 Binding.prototype.set = function(val) {
@@ -39,20 +67,35 @@ Binding.prototype.addObserver = function(element, options, fx) {
 
 }
 
-var multiplex = function(accessorFx, cfg) {
+function multiplex(accessorFx, cfg) {
   return function(selector, opt) {
-    var elements = document.querySelectorAll(selector);
+    var elements;
+    var binding = this;
+
+
+    if (typeof(selector) == 'string') {
+      elements = document.querySelectorAll(selector);
+      elements = Array.prototype.slice.call(elements);
+    } else if (selector instanceof HTMLElement) {
+      elements = [ selector ];
+    } else if (selector instanceof Array) {
+      elements = selector;
+    } else {
+      throw new Error(selector + ' is of unknown type.')
+    }
+
     elements.map(function(el) {
       var accessor = accessorFx(el, opt);
-      this.accessors.push(accessor);
+      binding.accessors.push(accessor);
 
-      this.observer.observe(el, cfg(el, opt));
+      binding.observer.observe(el, cfg(el, opt));
     });
   }
 }
 
 Binding.prototype.text = multiplex(ElementAccessor.text, MuFilter.text);
 Binding.prototype.html = multiplex(ElementAccessor.html, MuFilter.html);
+Binding.prototype.classList = multiplex(ElementAccessor.classList, MuFilter.class);
 Binding.prototype.hasClass = multiplex(ElementAccessor.hasClass, MuFilter.class);
 Binding.prototype.noClass = multiplex(ElementAccessor.noClass, MuFilter.class);
 Binding.prototype.attr = multiplex(ElementAccessor.attr, MuFilter.attr);

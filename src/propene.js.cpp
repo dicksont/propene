@@ -36,27 +36,34 @@
    }
   } else if (typeof define === 'function' && define.amd) { // Require.js & AMD
 
-   define('elbind', [ 'define-uniqueid'], function(defineUniqueId) {
+   define('propene', [ 'define-uniqueid'], function(defineUniqueId) {
      defineUniqueId(window.HTMLElement);
-     window.elbind = factory(window);
-     return window.elbind;
+     window.propene = factory(window);
+     return window.propene;
    });
 
   } else { // Browser
 
     if (!window.defineUniqueId) {
-      throw new Error('defineUniqueId undefined prior to elbind factory construction.');
+      throw new Error('defineUniqueId undefined prior to propene factory construction.');
     }
 
     window.defineUniqueId(window.HTMLElement);
-    window.elbind = factory(window);
+    window.propene = factory(window);
 
  }
 })(function(window) {
 
-  #include 'accessor.js'
-  #include 'mufilter.js'
-  #include 'observer.js'
-  #include 'binding.js'
+  #include "accessor.js"
+
+  #include "mufilter.js"
+
+  #include "observer.js"
+
+  #include "binding.js"
+
+  return function(obj, prop) {
+    return new Binding(obj, prop);
+  }
 
 });

@@ -1,38 +1,38 @@
 ```javascript
-elBind(ui.options, 'showInput')
+propene(ui.options, 'showInput')
   .hasClass('#div_showinput', 'on')
   .noClass('#section_message', 'off')
   .change(updateRightCol);
 
-elBind(ui.options, 'showKey')
+propene(ui.options, 'showKey')
   .hasClass('#div_showkey', 'on')
   .noClass('#section_key', 'off')
   .change(updateRightCol);
 
-elBind(ui.options, 'showFormat')
+propene(ui.options, 'showFormat')
   .hasClass('#div_showformat', 'on');
 
-elBind(ui.options, 'enableEditing')
+propene(ui.options, 'enableEditing')
   .hasClass('#div_enableediting', 'on');
 
-elBind(ui.options, 'input')
+propene(ui.options, 'input')
   .unique('#div_input input[type="radio"]', { attr: 'checked', output: 'value' })
   .change(updateAlgorithms);
 
-elBind(ui.options, 'algorithm')
+propene(ui.options, 'algorithm')
   .unique('#div_menu div.option', { class: 'selected', output: 'text '})
   .change(recompute);
 
-elBind(ui.state, 'showRightColumn')
+propene(ui.state, 'showRightColumn')
   .noClass('#div_rightcol', 'off');
 
-elBind(ui.state, 'result')
+propene(ui.state, 'result')
   .text('#div_result');
 
-elBind(ui.state, 'input')
+propene(ui.state, 'input')
   .text('#div_message');
 
-elBind(ui.state, 'key')
+propene(ui.state, 'key')
   .text('#div_key');
 
 function updateAlgorithms() {

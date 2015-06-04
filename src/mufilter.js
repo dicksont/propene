@@ -1,3 +1,29 @@
+/*
+ * Copyright (c) 2015 Dickson Tam
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 var MuFilter = {};
 
 MuFilter.text = function(el) {
@@ -18,8 +44,8 @@ MuFilter.class = function(el, className) {
   return new ObserveCfg({
     attributes: true,
     attributeFilter: [ 'class' ]
-  };
-});
+  });
+}
 
 MuFilter.attr = function(el, attrName) {
   return new ObserveCfg({
@@ -72,7 +98,7 @@ function ObserveCfg(cfg) {
   if (cfg) this.merge(cfg);
 }
 
-ObserveCfg.prototype.addAttr(attrName) {
+ObserveCfg.prototype.addAttr = function(attrName) {
   this.attributes = true;
 
   if (this.attributeFilter == null) this.attributeFilter = [];
@@ -81,12 +107,12 @@ ObserveCfg.prototype.addAttr(attrName) {
     this.attributeFilter.push(attrName);
 }
 
-ObserveCfg.prototype.addCData() {
+ObserveCfg.prototype.addCData = function() {
   this.childList = true;
   this.characterData = true;
 }
 
-ObserveCfg.prototype.merge(cfg) {
+ObserveCfg.prototype.merge = function(cfg) {
 
   if (cfg.attributes) this.attributes = true;
   if (cfg.characterData) this.characterData = true;

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/bower_components/qunit/qunit/qunit.css"></link>
+  <script src="/bower_components/qunit/qunit/qunit.js"></script>
+  <script src="/bower_components/define-uniqueid/uniqid.js"></script>
+  <script src="../dist/propene.js"></script>
+  <script>
+
+    function loadFixtures() {
+      var client = new XMLHttpRequest();
+      client.open('GET', 'fixtures.html');
+      client.onreadystatechange = function() {
+        document.getElementById('qunit-fixture').innerHTML = client.responseText.trim();
+      }
+      client.send();
+    }
+
+    function loadBrowserScripts(scripts) {
+      if (!scripts) {
+        return;
+      } else if (!Array.isArray(scripts)) {
+        loadBrowserScripts(new Array(scripts));
+      } else if (scripts.length == 0) {
+        return;
+      } else {
+        var script = scripts.shift();
+        var scriptel = document.createElement('script');
+
+        scriptel.setAttribute('src', script);
+        scriptel.type = "text/javascript";
+        scriptel.async = false;
+
+        document.body.appendChild(scriptel);
+
+        loadBrowserScripts(scripts);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      loadFixtures();
+      loadBrowserScripts([ "spec.js"]);
+    });
+
+  </script>
+
+
+</head>
+
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+</body>
+
+</html>
