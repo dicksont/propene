@@ -52,6 +52,10 @@
    }
 })(function(window) {
 
+   var MutationObserver = window.MutationObserver;
+   var document = window.document;
+   var HTMLElement = window.HTMLElement;
+
    var rclass = /^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/;
    var rattrib = /^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/;
 

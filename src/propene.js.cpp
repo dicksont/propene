@@ -54,6 +54,10 @@
  }
 })(function(window) {
 
+  var MutationObserver = window.MutationObserver;
+  var document = window.document;
+  var HTMLElement = window.HTMLElement;
+
   #include "accessor.js"
 
   #include "mufilter.js"

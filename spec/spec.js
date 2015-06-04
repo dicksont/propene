@@ -41,6 +41,10 @@
     var doc = jsdom.jsdom(txt);
     var win = doc.defaultView;
 
+    /* Stub for MutationObserver until it becomes available in jsdom */
+    win.MutationObserver = function() {};
+
+
     win.propene = require('../dist/propene.js')(win);
     module.exports = factory(qunit, win);
   } else { // Browser

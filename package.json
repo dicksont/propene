@@ -1,6 +1,6 @@
 {
   "name": "propene",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Front-end library for binding Object properties to HTML element state",
   "main": "dist/propene.js",
   "dependencies": {
@@ -12,7 +12,7 @@
     "qunitjs": "^1.18.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "qunit -c dist/propene.js -t spec/spec.js"
   },
   "repository": {
     "type": "git",
