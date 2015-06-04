@@ -5,7 +5,7 @@
   "authors": [
     "Dickson Tam <dicksont650@gmail.com>"
   ],
-  "description": "Front-end library for binding Object properties to HTML element state",
+  "description": "Front-end library to create reactive bindings of Object properties to HTML element state",
   "main": "dist/propene.js",
   "moduleType": [
     "amd",

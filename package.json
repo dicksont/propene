@@ -1,7 +1,7 @@
 {
   "name": "propene",
   "version": "0.0.1",
-  "description": "Front-end library for binding Object properties to HTML element state",
+  "description": "Front-end library to create reactive bindings of Object properties to HTML element state",
   "main": "dist/propene.js",
   "dependencies": {
     "define-uniqueid": "^0.0.3"
