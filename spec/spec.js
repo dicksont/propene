@@ -151,10 +151,10 @@
     return true;
   }
 
-  QUnit.test('velm', function(assert) {
+  QUnit.test('propene', function(assert) {
     var ui = {};
     assert.ok(propene != null, 'propene constructor exists');
-    assert.ok(propene(ui,'property') != null, 'velm constructor accepts object property string');
+    assert.ok(propene(ui,'property') != null, 'propene constructor accepts object property string');
   });
 
 
@@ -349,10 +349,6 @@
       assert.equal(input.value, 'bye', 'property can be assigned');
     }
 
-  });
-
-  QUnit.test('.value', function(assert) {
-    var ui = {};
     var select = document.querySelector('select.fixture')
 
     propene(ui, 'selection')
@@ -362,8 +358,8 @@
 
     ui.selection = "A";
     assert.equal(select.value, "A", "changing property changes selection");
-  });
 
+  });
 
   QUnit.load();
 });
