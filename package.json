@@ -4,13 +4,12 @@
   "description": "Front-end library for binding Object properties to HTML element state",
   "main": "dist/propene.js",
   "dependencies": {
-
     "define-uniqueid": "^0.0.3"
   },
   "devDependencies": {
     "js-beautify": "^1.5.6",
     "qunit": "^0.7.6",
-    "qunitjs": "^1.18.0",  
+    "qunitjs": "^1.18.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
