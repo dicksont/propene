@@ -24,15 +24,18 @@
  *
  */
 
-var MuFilter = {};
 
-MuFilter.text = function(el) {
+function ObserveCfg(cfg) {
+  if (cfg) this.merge(cfg);
+}
+
+ObserveCfg.text = function(el) {
   return new ObserveCfg({
     characterData: true,
     childList: true
   });
 }
-MuFilter.html = function(el) {
+ObserveCfg.html = function(el) {
   return new ObserveCfg({
     characterData: true,
     childList: true,
@@ -40,28 +43,28 @@ MuFilter.html = function(el) {
   });
 }
 
-MuFilter.class = function(el, className) {
+ObserveCfg.class = function(el, className) {
   return new ObserveCfg({
     attributes: true,
     attributeFilter: [ 'class' ]
   });
 }
 
-MuFilter.attr = function(el, attrName) {
+ObserveCfg.attr = function(el, attrName) {
   return new ObserveCfg({
     attributes: true,
     attributeFilter: [ attrName ]
   });
 };
 
-MuFilter.value = function(el) {
+ObserveCfg.value = function(el) {
   return new ObserveCfg({
     attributes: true,
     attributeFilter: [ 'value' ]
   });
 };
 
-MuFilter.checked = function(el) {
+ObserveCfg.checked = function(el) {
   return new ObserveCfg({
     attributes: true,
     attributeFilter: [ 'checked' ]
@@ -69,7 +72,7 @@ MuFilter.checked = function(el) {
 };
 
 
-MuFilter.unique = function(el, opts) {
+ObserveCfg.unique = function(el, opts) {
   var cfg = new ObserveCfg();
 
 
@@ -94,9 +97,6 @@ MuFilter.unique = function(el, opts) {
   return cfg;
 };
 
-function ObserveCfg(cfg) {
-  if (cfg) this.merge(cfg);
-}
 
 ObserveCfg.prototype.addAttr = function(attrName) {
   this.attributes = true;

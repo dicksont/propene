@@ -306,15 +306,17 @@
       }
    }
 
-   var MuFilter = {};
+   function ObserveCfg(cfg) {
+      if (cfg) this.merge(cfg);
+   }
 
-   MuFilter.text = function(el) {
+   ObserveCfg.text = function(el) {
       return new ObserveCfg({
          characterData: true,
          childList: true
       });
    }
-   MuFilter.html = function(el) {
+   ObserveCfg.html = function(el) {
       return new ObserveCfg({
          characterData: true,
          childList: true,
@@ -322,35 +324,35 @@
       });
    }
 
-   MuFilter.class = function(el, className) {
+   ObserveCfg.class = function(el, className) {
       return new ObserveCfg({
          attributes: true,
          attributeFilter: ['class']
       });
    }
 
-   MuFilter.attr = function(el, attrName) {
+   ObserveCfg.attr = function(el, attrName) {
       return new ObserveCfg({
          attributes: true,
          attributeFilter: [attrName]
       });
    };
 
-   MuFilter.value = function(el) {
+   ObserveCfg.value = function(el) {
       return new ObserveCfg({
          attributes: true,
          attributeFilter: ['value']
       });
    };
 
-   MuFilter.checked = function(el) {
+   ObserveCfg.checked = function(el) {
       return new ObserveCfg({
          attributes: true,
          attributeFilter: ['checked']
       });
    };
 
-   MuFilter.unique = function(el, opts) {
+   ObserveCfg.unique = function(el, opts) {
       var cfg = new ObserveCfg();
 
       if (opts.attr) {
@@ -373,10 +375,6 @@
 
       return cfg;
    };
-
-   function ObserveCfg(cfg) {
-      if (cfg) this.merge(cfg);
-   }
 
    ObserveCfg.prototype.addAttr = function(attrName) {
       this.attributes = true;
@@ -437,6 +435,14 @@
    }
 
    function Binding(obj, prop) {
+      if (obj == null) {
+         throw new Error('obj argument is undefined or null.');
+      }
+
+      if (typeof(obj) != 'object') {
+         throw new Error('obj argument is not an Object')
+      }
+
       Object.defineProperty(obj, prop, {
          get: this.get.bind(this),
          set: this.set.bind(this),
@@ -492,19 +498,21 @@
 
             binding.observer.observe(el, cfg(el, opt));
          });
+
+         return this;
       }
    }
 
-   Binding.prototype.text = multiplex(ElementAccessor.text, MuFilter.text);
-   Binding.prototype.html = multiplex(ElementAccessor.html, MuFilter.html);
-   Binding.prototype.classList = multiplex(ElementAccessor.classList, MuFilter.class);
-   Binding.prototype.hasClass = multiplex(ElementAccessor.hasClass, MuFilter.class);
-   Binding.prototype.noClass = multiplex(ElementAccessor.noClass, MuFilter.class);
-   Binding.prototype.attr = multiplex(ElementAccessor.attr, MuFilter.attr);
-   Binding.prototype.hasTruthyAttr = multiplex(ElementAccessor.hasTruthyAttr, MuFilter.attr);
-   Binding.prototype.noTruthyAttr = multiplex(ElementAccessor.noTruthyAttr, MuFilter.attr);
-   Binding.prototype.value = multiplex(ElementAccessor.value, MuFilter.value);
-   Binding.prototype.checked = multiplex(ElementAccessor.checked, MuFilter.checked);
+   Binding.prototype.text = multiplex(ElementAccessor.text, ObserveCfg.text);
+   Binding.prototype.html = multiplex(ElementAccessor.html, ObserveCfg.html);
+   Binding.prototype.classList = multiplex(ElementAccessor.classList, ObserveCfg.class);
+   Binding.prototype.hasClass = multiplex(ElementAccessor.hasClass, ObserveCfg.class);
+   Binding.prototype.noClass = multiplex(ElementAccessor.noClass, ObserveCfg.class);
+   Binding.prototype.attr = multiplex(ElementAccessor.attr, ObserveCfg.attr);
+   Binding.prototype.hasTruthyAttr = multiplex(ElementAccessor.hasTruthyAttr, ObserveCfg.attr);
+   Binding.prototype.noTruthyAttr = multiplex(ElementAccessor.noTruthyAttr, ObserveCfg.attr);
+   Binding.prototype.value = multiplex(ElementAccessor.value, ObserveCfg.value);
+   Binding.prototype.checked = multiplex(ElementAccessor.checked, ObserveCfg.checked);
 
    Binding.prototype.unique = function(selector, opts) {
       var isUnique = function(el) {
@@ -548,7 +556,7 @@
       this.accessors.push(accessor);
 
       elements.map(function(el) {
-         this.observer.observe(el, MuFilter.unique(el, opts));
+         this.observer.observe(el, ObserveCfg.unique(el, opts));
       });
 
       return accessor;

@@ -60,7 +60,7 @@
 
   #include "accessor.js"
 
-  #include "mufilter.js"
+  #include "observecfg.js"
 
   #include "observer.js"
 

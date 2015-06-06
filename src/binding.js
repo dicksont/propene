@@ -33,14 +33,22 @@ function getElement(selector) {
 }
 
 function Binding(obj, prop) {
-    Object.defineProperty(obj, prop, {
-      get: this.get.bind(this),
-      set: this.set.bind(this),
-      enumerable: true,
-      configurable: true
-    });
-    this.accessors = [];
-    this.observer = new Observer(this);
+  if (obj == null) {
+    throw new Error('obj argument is undefined or null.');
+  }
+
+  if (typeof(obj) != 'object') {
+    throw new Error('obj argument is not an Object')
+  }
+
+  Object.defineProperty(obj, prop, {
+    get: this.get.bind(this),
+    set: this.set.bind(this),
+    enumerable: true,
+    configurable: true
+  });
+  this.accessors = [];
+  this.observer = new Observer(this);
 }
 
 Binding.prototype.get = function() {
@@ -90,19 +98,21 @@ function multiplex(accessorFx, cfg) {
 
       binding.observer.observe(el, cfg(el, opt));
     });
+
+    return this;
   }
 }
 
-Binding.prototype.text = multiplex(ElementAccessor.text, MuFilter.text);
-Binding.prototype.html = multiplex(ElementAccessor.html, MuFilter.html);
-Binding.prototype.classList = multiplex(ElementAccessor.classList, MuFilter.class);
-Binding.prototype.hasClass = multiplex(ElementAccessor.hasClass, MuFilter.class);
-Binding.prototype.noClass = multiplex(ElementAccessor.noClass, MuFilter.class);
-Binding.prototype.attr = multiplex(ElementAccessor.attr, MuFilter.attr);
-Binding.prototype.hasTruthyAttr = multiplex(ElementAccessor.hasTruthyAttr, MuFilter.attr);
-Binding.prototype.noTruthyAttr = multiplex(ElementAccessor.noTruthyAttr, MuFilter.attr);
-Binding.prototype.value = multiplex(ElementAccessor.value, MuFilter.value);
-Binding.prototype.checked = multiplex(ElementAccessor.checked, MuFilter.checked);
+Binding.prototype.text = multiplex(ElementAccessor.text, ObserveCfg.text);
+Binding.prototype.html = multiplex(ElementAccessor.html, ObserveCfg.html);
+Binding.prototype.classList = multiplex(ElementAccessor.classList, ObserveCfg.class);
+Binding.prototype.hasClass = multiplex(ElementAccessor.hasClass, ObserveCfg.class);
+Binding.prototype.noClass = multiplex(ElementAccessor.noClass, ObserveCfg.class);
+Binding.prototype.attr = multiplex(ElementAccessor.attr, ObserveCfg.attr);
+Binding.prototype.hasTruthyAttr = multiplex(ElementAccessor.hasTruthyAttr, ObserveCfg.attr);
+Binding.prototype.noTruthyAttr = multiplex(ElementAccessor.noTruthyAttr, ObserveCfg.attr);
+Binding.prototype.value = multiplex(ElementAccessor.value, ObserveCfg.value);
+Binding.prototype.checked = multiplex(ElementAccessor.checked, ObserveCfg.checked);
 
 Binding.prototype.unique = function(selector, opts) {
   var isUnique = function(el) {
@@ -144,7 +154,7 @@ Binding.prototype.unique = function(selector, opts) {
   this.accessors.push(accessor);
 
   elements.map(function(el) {
-    this.observer.observe(el,  MuFilter.unique(el, opts));
+    this.observer.observe(el,  ObserveCfg.unique(el, opts));
   });
 
   return accessor;
