@@ -24,14 +24,6 @@
  *
  */
 
-function getElement(selector) {
-  if (selector instanceof HTMLElement) return selector;
-  if (typeof(selector) == 'string')
-    return document.querySelector(selector);
-
-  throw new Error('Unable to get element for' + selector);
-}
-
 function Binding(obj, prop) {
   if (obj == null) {
     throw new Error('obj argument is undefined or null.');
@@ -55,10 +47,19 @@ Binding.prototype.get = function() {
   return (this.accessors[0] === undefined || this.accessors[0].length == 0)? null : this.accessors[0].get();
 }
 
+Binding.prototype.notifyChange = function() {
+  if (!this.changeList) return;
+  for (var i=0; i < this.changeList.length; i++) {
+    this.changeList[i]();
+  }
+}
+
 Binding.prototype.set = function(val) {
   for (var i = 0; i < this.accessors.length; i++) {
     this.accessors[i].set(val);
   }
+
+  this.notifyChange();
 }
 
 
@@ -71,26 +72,37 @@ Binding.prototype.setFromElement = function(element) {
   }
 }
 
-Binding.prototype.addObserver = function(element, options, fx) {
+function getElements(selector) {
 
+  if (selector == null) {
+    throw new Error('Cannot get elements for a null/undefined selector')
+  } else if (typeof(selector) == 'string') {
+    elements = document.querySelectorAll(selector);
+    elements = Array.prototype.slice.call(elements);
+  } else if (selector instanceof HTMLElement) {
+    elements = [ selector ];
+  } else if (selector instanceof Array) {
+    elements = selector;
+  } else {
+    throw new Error(selector + ' is of unknown type.')
+  }
+
+  if (elements == null) {
+    throw new Error(selector + ' not found.');
+  }
+
+  return Array.prototype.slice.call(elements);
+}
+
+Binding.prototype.change = function(cbChange) {
+  this.changeList = this.changeList || [];
+  this.changeList.push(cbChange);
 }
 
 function multiplex(accessorFx, cfg) {
   return function(selector, opt) {
-    var elements;
     var binding = this;
-
-
-    if (typeof(selector) == 'string') {
-      elements = document.querySelectorAll(selector);
-      elements = Array.prototype.slice.call(elements);
-    } else if (selector instanceof HTMLElement) {
-      elements = [ selector ];
-    } else if (selector instanceof Array) {
-      elements = selector;
-    } else {
-      throw new Error(selector + ' is of unknown type.')
-    }
+    var elements = getElements(selector);
 
     elements.map(function(el) {
       var accessor = accessorFx(el, opt);
@@ -115,7 +127,7 @@ Binding.prototype.value = multiplex(ElementAccessor.value, ObserveCfg.value);
 Binding.prototype.checked = multiplex(ElementAccessor.checked, ObserveCfg.checked);
 
 Binding.prototype.unique = function(selector, opts) {
-  var isUnique = function(el) {
+  function isUnique(el) {
     if (opts.attr) {
       return ElementAccessor.hasAttr(el,opts.attr);
     } else if (opts.class) {
@@ -123,7 +135,7 @@ Binding.prototype.unique = function(selector, opts) {
     }
   };
 
-  var valueOf = function(el) {
+  function valueOf(el) {
     if (el == null) return null;
 
     if (opts.output == 'text') {
@@ -137,9 +149,9 @@ Binding.prototype.unique = function(selector, opts) {
     }
   };
 
-  var elements = document.querySelectorAll(selector);
+  var elements = getElements(selector);
 
-  var accessor = {
+  this.accessors.push({
     get: function() {
       var filtered = elements.filter(function(el) { return isUnique(el).get() });
       return valueOf(filtered[0]);
@@ -149,13 +161,11 @@ Binding.prototype.unique = function(selector, opts) {
         isUnique(el).set((valueOf(el) == val));
       });
     }
-  };
-
-  this.accessors.push(accessor);
+  });
 
   elements.map(function(el) {
     this.observer.observe(el,  ObserveCfg.unique(el, opts));
   });
 
-  return accessor;
+  return this;
 }

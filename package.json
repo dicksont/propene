@@ -1,6 +1,6 @@
 {
   "name": "propene",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Front-end library to create reactive bindings of Object properties to HTML element state",
   "main": "dist/propene.js",
   "dependencies": {

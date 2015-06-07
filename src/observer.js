@@ -32,7 +32,7 @@ function Observer(binding) {
 }
 
 Observer.prototype.handleMutations = function(mutations) {
-  console.log(mutations.target);
+  this.binding.notifyChange();
 }
 
 Observer.prototype.observe = function(el, cfg) {
