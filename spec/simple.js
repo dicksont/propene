@@ -30,10 +30,7 @@
     var qunit = (typeof(QUnit) == "undefined")? require('qunitjs') : QUnit;
 
     require('./setup.js').setupWindow('simple.html', function(win) {
-
-      win.MutationObserver = function() {};
       win.propene = require('../dist/propene.js')(win);
-
       module.exports = factory(qunit, win);
     });
   } else { // Browser

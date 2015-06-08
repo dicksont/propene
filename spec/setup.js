@@ -41,7 +41,7 @@ module.exports = {
 
     jsdom.env({
       file: path.resolve(dirname,htmlFile),
-      scripts: [ '../lib/classList.js'],
+      scripts: [ '../lib/classList.js', '../node_modules/mutationobservers/MutationObserver.js'],
       loaded: function(errors, window) {
         if (errors) {
           throw new Error('Error(s) occurred while setting up window: ' + errors);
