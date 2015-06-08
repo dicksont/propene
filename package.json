@@ -10,7 +10,8 @@
     "js-beautify": "^1.5.6",
     "qunit": "^0.7.6",
     "qunitjs": "^1.18.0",
-    "jsdom": "^5.4.3"
+    "jsdom": "^5.4.3",
+	"mutationobservers": "^0.0.1"
   },
   "scripts": {
     "test": "qunit -c dist/propene.js -t spec/simple.js"
