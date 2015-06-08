@@ -66,63 +66,6 @@ function regExp(className) {
   return new RegExp('(^|\\s+)' + className + '(?=($|\\s+))');
 }
 
-
-function hasClass(el, className) {
-  if (el.classList) {
-    return el.classList.contains(className);
-  } else if (el.className) {
-    return !!~el.className.search(regExp(className));
-  } else {
-    throw new Error('Element ' + el + ' does not have classList or className properties.');
-  }
-}
-
-function addClass(el, className) {
-  if (hasClass(el, className)) return;
-
-  if (el.classList) {
-    el.classList.add(className);
-  } else if (el.className) {
-    el.className = el.className + ((el.className.trim().length > 0)? " " :"") + className;
-  } else {
-    throw new Error('Element ' + el + ' does not have classList or className properties.');
-  }
-}
-
-function removeClass(el, className) {
-  if (!hasClass(el, className)) return;
-
-  if (el.classList) {
-    el.classList.remove(className);
-  } else if (el.className) {
-    el.className = el.className.trim().replace(regExp(className), '');
-  } else {
-    throw new Error('Element ' + el + ' does not have classList or className properties.');
-  }
-}
-
-function classList(el, arr) {
-  if (arr && el.classList) { /*  New Setter */
-    var last = el.classList.length - 1;
-    for (var i=last; i >= 0; i--) {
-      el.classList.remove(el.classList[i]);
-    }
-
-    for (var i=0; i < arr.length; i++) {
-      el.classList.add(arr[i]);
-    }
-
-  } else if (arr && el.className) { /*  Old Setter */
-      el.className = arr.join(' ');
-  } else if (el.classList) { /* New Getter */
-      return Array.prototype.slice.call(el.classList);
-  } else if (el.className) { /* Old Getter */
-      return el.className.split(/\s/);
-  } else {
-    throw new Error('Element ' + el + ' does not have classList or className properties.');
-  }
-}
-
 var ElementAccessor = {};
 
 ElementAccessor.text = function(el) {
@@ -150,10 +93,17 @@ ElementAccessor.html = function(el) {
 ElementAccessor.classList = function(el) {
   return {
     get: function() {
-      return classList(el);
+      return Array.prototype.slice.call(el.classList);
     },
     set: function(arr) {
-      classList(el, arr);
+      var last = el.classList.length - 1;
+      for (var i=last; i >= 0; i--) {
+        el.classList.remove(el.classList[i]);
+      }
+
+      for (var i=0; i < arr.length; i++) {
+        el.classList.add(arr[i]);
+      }
     }
   }
 }
@@ -162,13 +112,16 @@ ElementAccessor.hasClass = function(el, className) {
 
   return {
     get: function() {
-      return hasClass(el, className);
+
+      return el.classList.contains(className);
     },
     set: function(boolean) {
+
+
       if (boolean) {
-        addClass(el, className);
+        el.classList.add(className);
       } else {
-        removeClass(el, className);
+        el.classList.remove(className);
       }
     }
   };
@@ -177,13 +130,13 @@ ElementAccessor.hasClass = function(el, className) {
 ElementAccessor.noClass = function(el, className) {
   return {
     get: function() {
-      return !hasClass(el, className);
+      return !el.classList.contains(className);
     },
     set: function(boolean) {
       if (!boolean) {
-        addClass(el, className);
+        el.classList.add(className);
       } else {
-        removeClass(el, className);
+        el.classList.remove(className);
       }
     }
   }

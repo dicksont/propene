@@ -26,7 +26,7 @@
 
 module.exports = {
 
-  setupWindow: function(htmlFile) {
+  setupWindow: function(htmlFile, cbFinish) {
     var isIojs = parseInt(process.version.match(/^v(\d+)\./)[1]) >= 1;
 
     if (!isIojs) throw new Error('testing on jsDom requires io.js.');
@@ -38,14 +38,17 @@ module.exports = {
     var txt = fs.readFileSync(path.resolve(dirname,htmlFile), 'utf8');
 
     var jsdom = require('jsdom');
-    var doc = jsdom.jsdom(txt);
-    var window = doc.defaultView;
 
-    /* Stub for MutationObserver until it becomes available in jsdom */
-    window.MutationObserver = function() {};
-
-    window.propene = require('../dist/propene.js')(window);
-
-    return window;
+    jsdom.env({
+      file: path.resolve(dirname,htmlFile),
+      scripts: [ '../lib/classList.js'],
+      loaded: function(errors, window) {
+        if (errors) {
+          throw new Error('Error(s) occurred while setting up window: ' + errors);
+        } else {
+          cbFinish(window);
+        }
+      }
+    });
   }
 }

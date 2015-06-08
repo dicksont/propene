@@ -27,9 +27,15 @@
 (function(factory) {
 
   if (typeof module !== 'undefined' && module && module.exports) { // Node.js & CommonJS
-    var win = require('./setup.js').setupWindow('simple.html');
     var qunit = (typeof(QUnit) == "undefined")? require('qunitjs') : QUnit;
-    module.exports = factory(qunit, win);
+
+    require('./setup.js').setupWindow('simple.html', function(win) {
+
+      win.MutationObserver = function() {};
+      win.propene = require('../dist/propene.js')(win);
+
+      module.exports = factory(qunit, win);
+    });
   } else { // Browser
     factory(QUnit, window);
   }
@@ -38,79 +44,6 @@
 
   var document = window.document;
   var propene = window.propene;
-
-  function regExp(className) {
-    return new RegExp('(^|\\s+)' + className + '(?=($|\\s+))');
-  }
-
-
-  function hasClass(el, className) {
-    if (typeof(el) == 'string')
-      el = document.querySelector(el);
-
-    if (el.classList) {
-      return el.classList.contains(className);
-    } else if (el.className) {
-      return !!~el.className.search(regExp(className));
-    } else {
-      throw new Error('Element ' + el + ' does not have classList or className properties.');
-    }
-  }
-
-  function addClass(el, className) {
-    if (typeof(el) == 'string')
-      el = document.querySelector(el);
-
-    if (hasClass(el, className)) return;
-
-    if (el.classList) {
-      el.classList.add(className);
-    } else if (el.className) {
-      el.className = el.className + ((el.className.trim().length > 0)? " " :"") + className;
-    } else {
-      throw new Error('Element ' + el + ' does not have classList or className properties.');
-    }
-  }
-
-  function removeClass(el, className) {
-    if (typeof(el) == 'string')
-      el = document.querySelector(el);
-
-    if (!hasClass(el, className)) return;
-
-    if (el.classList) {
-      el.classList.remove(className);
-    } else if (el.className) {
-      el.className = el.className.trim().replace(regExp(className), '');
-    } else {
-      throw new Error('Element ' + el + ' does not have classList or className properties.');
-    }
-  }
-
-  function classList(el, arr) {
-    if (typeof(el) == 'string')
-      el = document.querySelector(el);
-
-    if (arr && el.classList) { /*  New Setter */
-      var last = el.classList.length - 1;
-      for (var i=last; i >= 0; i--) {
-        el.classList.remove(el.classList[i]);
-      }
-
-      for (var i=0; i < arr.length; i++) {
-        el.classList.add(arr[i]);
-      }
-
-    } else if (arr && el.className) { /*  Old Setter */
-        el.className = arr.join(' ');
-    } else if (el.classList) { /* New Getter */
-        return Array.prototype.slice.call(el.classList);
-    } else if (el.className) { /* Old Getter */
-        return el.className.split(/\s/);
-    } else {
-      throw new Error('Element ' + el + ' does not have classList or className properties.');
-    }
-  }
 
   Array.prototype.equals = Array.prototype.equals || function (array) {
     // if the other array is a falsy value, return
@@ -194,12 +127,12 @@
 
     ui.on = false;
 
-    assert.ok(!hasClass(div,'on'), ' false assignment removes class');
+    assert.ok(!div.classList.contains('on'), ' false assignment removes class');
 
     ui.on = true;
-    assert.ok(hasClass(div,'on'), ' true assignment adds class');
+    assert.ok(div.classList.contains('on'), ' true assignment adds class');
 
-    removeClass(div, 'on');
+    div.classList.remove('on');
     assert.equal(ui.on, false, 'property returns false if class is not present');
   });
 
@@ -214,12 +147,12 @@
     assert.equal(ui.on, true,'property returns true if class is not present');
 
     ui.on = false;
-    assert.ok(hasClass(div,'off'), ' false assignment adds class');
+    assert.ok(div.classList.contains('off'), ' false assignment adds class');
 
     ui.on = true;
-    assert.ok(!hasClass(div,'off'), ' true assignment removes class');
+    assert.ok(!div.classList.contains('off'), ' true assignment removes class');
 
-    addClass(div, 'off');
+    div.classList.add('off');
     assert.equal(ui.on, false, 'property returns false if class is present');
   });
 
