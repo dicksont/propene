@@ -4,12 +4,13 @@
   <link rel="stylesheet" href="/bower_components/qunit/qunit/qunit.css"></link>
   <script src="/bower_components/qunit/qunit/qunit.js"></script>
   <script src="/bower_components/define-uniqueid/uniqid.js"></script>
+  <script src="/bower_components/array-etc/lib/equals.js"></script>
   <script src="../dist/propene.js"></script>
   <script>
 
-    function loadFixtures() {
+    function loadFixtures(file) {
       var client = new XMLHttpRequest();
-      client.open('GET', 'simple.html');
+      client.open('GET', file);
       client.onreadystatechange = function() {
         document.getElementById('qunit-fixture').innerHTML = client.responseText.trim();
       }
@@ -37,19 +38,54 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', function() {
-      loadFixtures();
-      loadBrowserScripts([ "simple.js"]);
-    });
+    function load(cfg) {
+      loadFixtures(cfg.fixtures);
+      loadBrowserScripts(cfg.scripts);
+    }
 
+    location.getParameterByName = function(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(this.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
   </script>
 
 
 </head>
 
 <body>
+  <form>
+    <label>Scenario</label>
+    <select name="q">
+      <option value="simple">Simple</option>
+      <option value="complex">Complex</option>
+    </select>
+  </form>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
+  <script>
+    var q = location.getParameterByName('q') || 'simple';
+    var select = document.querySelector('select');
+    select.value = q;
+
+    if (q =='complex') {
+      load({
+        fixtures: 'complex.html',
+        scripts: 'complex.js'
+      });
+    } else {
+      load({
+        fixtures: 'simple.html',
+        scripts: 'simple.js'
+      });
+    }
+
+
+    document.querySelector('select').addEventListener('change', function() {
+      document.forms[0].submit();
+    });
+  </script>
 </body>
 
 </html>
