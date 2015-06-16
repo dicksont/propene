@@ -60,7 +60,7 @@ propene(ui.options, 'showInput')
 Chaining will allow us to neatly construct complex reactive bindings in our propene app.
 
 ## Change Callback
-Not all cases will fit perfectly into this linear model. We may run into situations where our view state logically depends on multiple conditions. For example, we might want to show the right column only when the its children the input message and the key, are visible. To do this, we can use the change method to specify a callback to be called when the value of the binding has changed.
+Not all cases will fit perfectly into this linear model. We may run into situations where our view state logically depends on multiple conditions. For example, we might want to show the right column only when the its children, the input message or the key, are visible. To do this, we can use the change method to specify a callback to be called when the value of the binding has changed.
 
 
 ```javascript
@@ -79,7 +79,7 @@ function updateRightCol() {
 }
 ```
 
-The function *updateRightCol* will be called, whenever *ui.options.showInput*, *ui.options.showKey*, or their associated view objects change. The property *ui.state.showRightColumn* will be set. Changes to the view will be cascaded.
+The function *updateRightCol* will be called, whenever *ui.options.showInput*, *ui.options.showKey*, or their associated view states change. The property *ui.state.showRightColumn* will be set. Changes to the view will be cascaded.
 
 
 [Design Specs](USECASE.md)
