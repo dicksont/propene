@@ -7,6 +7,9 @@
   ],
   "description": "Front-end library to create reactive bindings of Object properties to HTML element state",
   "main": "dist/propene.js",
+  "dependencies": {
+    "define-uniqueid": "^0.0.3"
+  },
   "moduleType": [
     "amd",
     "globals",
