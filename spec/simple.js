@@ -31,6 +31,10 @@
 
     require('./setup.js').setupWindow('simple.html', function(win) {
       win.propene = require('../dist/propene.js')(win);
+
+      var arrload = require('array-etc');
+      arrload(['equals']);
+
       module.exports = factory(qunit, win);
     });
   } else { // Browser
@@ -42,8 +46,6 @@
   var document = window.document;
   var propene = window.propene;
 
-  var arrload = require('array-etc');
-  arrload(['equals']);
 
   QUnit.test('propene', function(assert) {
     var ui = {};
