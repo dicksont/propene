@@ -4,11 +4,21 @@ Propene is a front-end JavaScript library that allows developers to create react
 
 ## Installation
 
+### Node
+In your project root, run:
 ```shell
 npm install propene
 ```
 
+### Web
+In your project root, run:
+```shell
+bower install propene
+
+```
+
 ## Introduction
+
 Propene works by binding an object property to states of elements in the DOM. To use propene, you would have to specify how these property values would be transformed into DOM state. For example, if you want the value of the *showInput* property in the *ui.options* object to reflect whether the toggle switch element has a class *on* in the DOM, you can do something like:
 
 
