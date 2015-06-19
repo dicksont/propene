@@ -43,15 +43,15 @@ function Binding(obj, prop) {
   this.observer = new Observer(this);
 }
 
-Binding.prototype.get = function() {
-  return (this.accessors[0] === undefined || this.accessors[0].length == 0)? null : this.accessors[0].get();
-}
-
 Binding.prototype.notifyChange = function() {
   if (!this.changeList) return;
   for (var i=0; i < this.changeList.length; i++) {
     this.changeList[i]();
   }
+}
+
+Binding.prototype.get = function() {
+  return (this.accessors[0] === undefined || this.accessors[0].length == 0)? null : this.accessors[0].get();
 }
 
 Binding.prototype.set = function(val) {
@@ -125,6 +125,7 @@ Binding.prototype.hasTruthyAttr = multiplex(ElementAccessor.hasTruthyAttr, Obser
 Binding.prototype.noTruthyAttr = multiplex(ElementAccessor.noTruthyAttr, ObserveCfg.attr);
 Binding.prototype.value = multiplex(ElementAccessor.value, ObserveCfg.value);
 Binding.prototype.checked = multiplex(ElementAccessor.checked, ObserveCfg.checked);
+
 
 Binding.prototype.unique = function(selector, opts) {
   function isUnique(el) {
