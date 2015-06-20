@@ -227,3 +227,27 @@ ElementAccessor.checked = function(el) {
     attribute: 'checked'
   }
 }
+
+ElementAccessor.height = function(el) {
+  return {
+    get: function() {
+      return el.offsetHeight;
+    },
+    set: function(height) {
+      height = (typeof(height) == 'number')? height + 'px' : height;
+      el.style.height = height;
+    }
+  }
+}
+
+ElementAccessor.width = function(el) {
+  return {
+    get: function() {
+      return el.offsetWidth;
+    },
+    set: function(width) {
+      width = (typeof(width) == 'number')? width + 'px' : width;
+      el.style.width = width;
+    }
+  }
+}
