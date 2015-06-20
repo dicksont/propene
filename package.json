@@ -4,7 +4,8 @@
   "description": "Front-end library to create reactive bindings of Object properties to HTML element state",
   "main": "dist/propene.js",
   "dependencies": {
-    "define-uniqueid": "^0.0.3"
+    "define-uniqueid": "^0.0.3",
+    "text-change-digest": "~0.0.2"
   },
   "devDependencies": {
     "js-beautify": "^1.5.6",
